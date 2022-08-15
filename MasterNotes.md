@@ -1,6 +1,6 @@
-# These master notes are not final and being editied as use this foundation for the albopictus analysis
+# These master notes are not final and being editied as we use this foundation for the albopictus analysis
 
-# Workflow details for the Culex biting miRNA analysis
+# Workflow details for the *Aedes albopictus* biting miRNA analysis
 
 ## Upstream 
 Information about sequence reads (raw read count, read alignment rate, etc.) for the data can be found [here](https://docs.google.com/spreadsheets/d/13YrU2PD24Sz6WBNc_0IQAEPI7b5aUSFxtw9gr8DoXnQ/edit?usp=sharing)
