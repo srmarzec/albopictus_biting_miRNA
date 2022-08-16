@@ -14,13 +14,11 @@ The raw reads are available in NCBI’s short read archive (SRA) under accession
 
 Trimmomatic (version 0.39) was used to trim sequence reads based on quality ([script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/trim.sh))
 
+We removed specific adapter sequences for the Illumina small RNA 3' adapter, which can be found [here](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/smRNA_NexFlex_adapters.fa) after contacting the sequencing center for the specific adapters used. 
+
 FastQC (v0.11.9) was used for quality control visualization ([script](https://github.com/AngelaZhou779/RISE/blob/main/script/FastQC.sh))
 
 Preliminary trimming and fastqc showed a poor "per sequence base content" for the first few bases. Therefore, we used headcrop four in the begginning, but there is no command to crop the four at the end which could be any base pairs. Note that SE settings were used. 
-
-In addition, we removed the adapter sequences for the Illumina small RNA 3' adapter, which can be found [here](https://github.com/AngelaZhou779/RISE/blob/main/miscellaneous/smalladaptercontent.md).
-
-These sequences were obtained after contacting those that did the illlumina sequencing and asking for the exact adapter sequences used. 
 
 From the fastqc files, you can see that the per base sequences quality improved and the adapter content was removed. Around 80% of the reads are left after cleaning, although there are still red flags for the following: [FAIL]Per base sequence content [FAIL]Per sequence GC content [WARNING]Sequence Length Distribution [FAIL]Sequence Duplication Levels [FAIL] Overrepresented sequences. It is under a general consensus, however, that these flags will not significantly affect our analysis and that there might be a biological reason behind them.
 
