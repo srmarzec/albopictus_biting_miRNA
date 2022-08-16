@@ -12,18 +12,7 @@ The raw reads are available in NCBI’s short read archive (SRA) under accession
 
 ### Preprocessing and Quality Control
 
-We downloaded and worked with the following data files:
-
-$ gsutil ls gs://gu-biology-pi-paa9/culexBiting_smallRNA/rawData
-
-M1_S4_L001_R1_001.fastq.gz
-M2_S5_L001_R1_001.fastq.gz
-M4_S6_L001_R1_001.fastq.gz
-P1_S1_L001_R1_001.fastq.gz
-P2_S2_L001_R1_001.fastq.gz
-P3_S3_L001_R1_001.fastq.gz
-
-Trimmomatic (version 0.39) was used to trim sequence reads based on quality ([script](https://github.com/AngelaZhou779/RISE/blob/main/script/Trimmomatic.sh))
+Trimmomatic (version 0.39) was used to trim sequence reads based on quality ([script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/trim.sh))
 
 FastQC (v0.11.9) was used for quality control visualization ([script](https://github.com/AngelaZhou779/RISE/blob/main/script/FastQC.sh))
 
