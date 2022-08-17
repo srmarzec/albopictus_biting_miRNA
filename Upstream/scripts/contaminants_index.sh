@@ -18,7 +18,7 @@ index_path_prefix=/home/sm3679/albopictus_biting_miRNA/albopictus_genome/contami
 
 #- RUN bowtie ----------------------------------------------------------------#
 
-bowtie-build ${ref_genome} ${index_path_prefix}
+bowtie2-build ${ref_genome} ${index_path_prefix}
 
 
 #- Unload module----------------#
