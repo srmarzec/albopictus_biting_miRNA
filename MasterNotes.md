@@ -20,7 +20,7 @@ FastQC (v0.11.9) was used for quality control visualization ([script](https://gi
 
 Preliminary trimming and fastqc showed a poor "per sequence base content" for the first few bases. Therefore, we used headcrop four in the begginning, but there is no command to crop the four at the end which could be any base pairs. Note that SE settings were used. 
 
-From the fastqc files, you can see that the per base sequences quality improved and the adapter content was removed. Around 80% of the reads are left after cleaning, although there are still red flags for the following: [FAIL]Per base sequence content [FAIL]Per sequence GC content [WARNING]Sequence Length Distribution [FAIL]Sequence Duplication Levels [FAIL] Overrepresented sequences. It is under a general consensus, however, that these flags will not significantly affect our analysis and that there might be a biological reason behind them.
+From the fastqc files, you can see that the per base sequences quality improved and the adapter content was removed. There are still flags for the following with either warnings or fails: Per base sequence content, Per sequence GC content, Sequence Length Distribution, Sequence Duplication Levels, Overrepresented sequences. It is under a general consensus, however, that these flags will not significantly affect our analysis and that there might be a biological reason behind them.
 
 #### Cleaning out other small RNAs
 Aim: to remove tRNA and other contaminates.
