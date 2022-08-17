@@ -13,7 +13,7 @@ module load bowtie2/2.4.4
 #- Set variables ----------------------------------------------------------------#
 
 ref_genome=/home/sm3679/albopictus_biting_miRNA/albopictus_genome/albo_contaminants.fasta
-index_path_prefix=/home/sm3679/albopictus_biting_miRNA/albopictus_genome/contaminant_index/
+index_path_prefix=/home/sm3679/albopictus_biting_miRNA/albopictus_genome/contaminant_index/contaminant
 
 
 #- RUN bowtie ----------------------------------------------------------------#
