@@ -19,13 +19,13 @@ filtered_dir=/home/sm3679/albopictus_biting_miRNA/filtered_dir
 sam_dir=/home/sm3679/albopictus_biting_miRNA/sam_dir
  
 #- RUN command ----------------#
-files=(${input_dir}/*.cln.fastq.gz)
+files=(${input_dir}/*_cln.fastq.gz)
 for file in ${files[@]}
 do
 name=${file}
-base=`basename ${name} .cln.fastq.gz`
+base=`basename ${name} _cln.fastq.gz`
 
-bowtie2 -x ${index_path} -U ${input_dir}/${base}.cln.fastq.gz -S ${sam_dir}/${base}.flt.cln.sam --un-gz ${filtered_dir}/${base}.flt.fastq.gz
+bowtie2 -x ${index_path} -U ${input_dir}/${base}_cln.fastq.gz -S ${sam_dir}/${base}_flt.cln.sam --un-gz ${filtered_dir}/${base}_flt.fastq.gz
 
 done 
 
