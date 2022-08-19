@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=sortSize_multi --output=%x.%j.out
-#SBATCH --mail-type=END,FAIL --mail-user=sm3679@georgetown.edu
+#SBATCH --mail-type=END,FAIL --mail-user=[]@georgetown.edu
 #SBATCH --nodes=1 --ntasks=1 --cpus-per-task=1 --time=72:00:00
 #SBATCH --mem=4G
 
