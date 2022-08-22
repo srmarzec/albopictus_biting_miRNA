@@ -18,25 +18,26 @@ We removed specific adapter sequences for the Illumina small RNA 3' adapter, whi
 
 FastQC (v0.11.9) was used for quality control visualization ([script](https://github.com/AngelaZhou779/RISE/blob/main/script/FastQC.sh))
 
-Preliminary trimming and fastqc showed a poor "per sequence base content" for the first few bases. Therefore, we used headcrop four in the begginning, but there is no command to crop the four at the end which could be any base pairs. Note that SE settings were used. 
+Preliminary fastqc showed a poor "per sequence base content" for the first few bases. Therefore, we used headcrop four in the begginning, but there is no command to crop the four at the end which could be any base pairs. Note that SE settings were used. 
 
 From the fastqc files, you can see that the per base sequences quality improved and the adapter content was removed. There are still flags for the following with either warnings or fails: Per base sequence content, Per sequence GC content, Sequence Length Distribution, Sequence Duplication Levels, Overrepresented sequences. It is under a general consensus, however, that these flags will not significantly affect our analysis and that there might be a biological reason behind them.
 
 #### Cleaning out other small RNAs
 Aim: to remove tRNA and other contaminates.
 
-We removed tRNA and rRNA sequences that we obtained from NCBI Culex quinquefasciatus mitochondrion, complete genome. The full link can be found [here](https://www.ncbi.nlm.nih.gov/nucleotide/NC_014574.1).
+CHANGE HERE   We removed tRNA and rRNA sequences that we obtained from NCBI Culex quinquefasciatus mitochondrion, complete genome. The full link can be found [here](https://www.ncbi.nlm.nih.gov/nucleotide/NC_014574.1).
 
-To do so, we put all of our tRNA and rRNA sequences into a "contaminants" file and then made an index using bowtie2/2.4.4:
-$ bowtie2-build culex_quinq_tRNArRNA.fa contam_align
+To do so, we put all of our tRNA and rRNA sequences into a "contaminants" file
 
-Ran alignment and put non-aligned reads into filtered fasta files using this [script](https://github.com/AngelaZhou779/RISE/blob/main/miscellaneous/bowtie2slurmscriptM1.SBATCH).
+We indexed this contaminants file using Bowtie2 (v2.4.4) with this [script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/contaminants_index.sh).
 
-We were able to get 6 output files with all the sequences that did NOT align with our contanminants file i.e. files with sequences that were not tRNAs or rRNAs (presumably mostly miRNAs are left).
+Ran alignment and put non-aligned reads into filtered fasta files using this [script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/contaminants_align.sh).
+
+The output files contain all the sequences that did NOT align with our contanminants file i.e. files with sequences that were not tRNAs or rRNAs (presumably mostly miRNAs are left).
 
 #### Size sorting
 
-We wanted to only keep reads that fell within 18 - 24 bases which is what we consider the size of miRNAs. This was done with a custom [python script](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/scripts/python_scripts/trimANDsizeSort.py) for all the files with this [script](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/scripts/sortSize_multi.sh)
+We wanted to only keep reads that fell within 18 - 24 bases which is what we consider the size of miRNAs. This was done with a custom [python script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/python_scripts/trimANDsizeSort.py) for all the files with this [script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/sortSize_multi.sh).
 
 ### miRDeep2 
 #### Index with Bowtie
