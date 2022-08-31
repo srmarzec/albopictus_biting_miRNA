@@ -1,5 +1,3 @@
-# These master notes are not final and being editied as we use this foundation for the albopictus analysis
-
 # Workflow details for the *Aedes albopictus* biting miRNA analysis
 
 ## Upstream 
