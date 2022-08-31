@@ -16,18 +16,16 @@ Trimmomatic (version 0.39) was used to trim sequence reads based on quality ([sc
 
 We removed specific adapter sequences for the Illumina small RNA 3' adapter, which can be found [here](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/smRNA_NexFlex_adapters.fa) after contacting the sequencing center for the specific adapters used. 
 
-FastQC (v0.11.9) was used for quality control visualization ([script](https://github.com/AngelaZhou779/RISE/blob/main/script/FastQC.sh))
+FastQC (v0.11.9) was used for quality control visualization ([script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/fastqc.sh))
 
 Preliminary fastqc showed a poor "per sequence base content" for the first few bases. Therefore, we used headcrop four in the begginning, but there is no command to crop the four at the end which could be any base pairs. Note that SE settings were used. 
 
-From the fastqc files, you can see that the per base sequences quality improved and the adapter content was removed. There are still flags for the following with either warnings or fails: Per base sequence content, Per sequence GC content, Sequence Length Distribution, Sequence Duplication Levels, Overrepresented sequences. It is under a general consensus, however, that these flags will not significantly affect our analysis and that there might be a biological reason behind them.
+From the fastqc files, you can see that the per base sequences quality improved and the adapter content was removed. There are still flags for the following with either warnings or fails: Per base sequence content, Per sequence GC content, Sequence Length Distribution, Sequence Duplication Levels, Overrepresented sequences, Per Tile Sequence Quality. It is under a general consensus, however, that these flags will not significantly affect our analysis and that there might be a biological reason behind them. 
 
 #### Cleaning out other small RNAs
 Aim: to remove tRNA and other contaminates.
 
-CHANGE HERE   We removed tRNA and rRNA sequences that we obtained from NCBI Culex quinquefasciatus mitochondrion, complete genome. The full link can be found [here](https://www.ncbi.nlm.nih.gov/nucleotide/NC_014574.1).
-
-To do so, we put all of our tRNA and rRNA sequences into a "contaminants" file
+All tRNAs and rRNAs features from the gff file for AalbF3 were collected and we made a subset fasta with those sequences as a "contaminants" file.
 
 We indexed this contaminants file using Bowtie2 (v2.4.4) with this [script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/contaminants_index.sh).
 
@@ -42,63 +40,23 @@ We wanted to only keep reads that fell within 18 - 24 bases which is what we con
 ### miRDeep2 
 #### Index with Bowtie
 
-Mapping was done using the *Culex quinquefasciatus* reference genome ([GCF_015732765.1](https://www.ncbi.nlm.nih.gov/assembly/GCF_015732765.1/)) found on NCBI
+Mapping was done using the *Aedes albopictus* reference genome (GCA_018104305.1) found on NCBI
 
-The genome was indexed for miRDeep2 using Bowtie (v1.3.1) with this [script](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/scripts/genome_index.sh). Note, for miRDeep2 to run properly, there can be no whitespace in the headers of the reference genome fasta so I had to remove/replace the whitespaces before indexing.
+The genome was indexed for miRDeep2 using Bowtie (v1.3.1) with this [script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/genome_index.sh). Note, for miRDeep2 to run properly, there can be no whitespace in the headers of the reference genome fasta so I had to remove/replace the whitespaces before indexing.
 
 #### Run miRDeep2 to count reads for each miRNA
 
 miRDeep2 (miRDeep2.0.1.3) was installed and run in a conda virtual environment which was created following this [markdown](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/misc/Conda_VirtualEnvironment.md).
 
-miRDeep2 was [run](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/scripts/miRDeep2.sh) and we found no novel miRNAs. We had a more extensive starting list because of a recent publication. 
+miRDeep2 was [run](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/miRDeep2.sh) and we looked for novel miRNAs identified in our samples and added these to the input list of known miRNAs for sake of quantification (mapping reads to miRNAs).
 
-We then mapped reads to the known miRNAs with this [script](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/scripts/miRDeep_mapper.sh). This produced a count matrix we used for downstream analysis. 
+We then mapped reads to the known miRNAs with this [script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Upstream/scripts/quantifier_FULL.sh). This produced a count matrix we used for downstream analysis. 
 
 ## Downstream
 
-All downstream analysis done in R using RStudio version **1.4.1106**
+All downstream analysis done in R (v4.0.2)
 
 ### DESeq
-Using DESeq2 (v1.30.1) ([script](https://github.com/AngelaZhou779/RISE/blob/main/script/DESeqmiRNA.R))
+Using DESeq2 (v1.30.1) ([script](https://github.com/srmarzec/albopictus_biting_miRNA/blob/main/Downstream/DESeq.R))
 
-As a result of performing differential expression analysis on our 90 miRNAs, we obtained 8 differentially abundant miRNAs:
-[Volcano plot](https://user-images.githubusercontent.com/78465068/156470750-19dfb1c7-f96d-4605-9d33-5d2092fc29d1.png)
-Figure 1. Volano plot showing the 8 DE miRNAs as 8 red dots. They have large fold changes that are also statistically significant. We used cutoff values of filter(padj < 0.05, abs(log2FoldChange) > 0.58) corresponding to a 1.5 fold change increase or decrease in expression.
-
-## Biological Function
-Now that we have obtained the list of significant miRNAs, we have decided to go ahead to explore their biological functions through doing literature searches.
-
-We found an important supplementary table from Xu et. al. that listed all of the predicted and validated of mosquito miRNA targets and functions:
-
-[miRNAs highlighted Table_S1_Development of miRNA-Based Approaches to Explore the Interruption of Mosquito-Borne Disease Transmission.docx](https://github.com/AngelaZhou779/RISE/files/8174654/miRNAs.highlighted.Table_S1_Development.of.miRNA-Based.Approaches.to.Explore.the.Interruption.of.Mosquito-Borne.Disease.Transmission.docx)
-
-Here is the table with the signifcant miRNAs and notes from Xu. et al.:
-[miRNA notes.xlsx](https://github.com/AngelaZhou779/RISE/files/8174752/miRNA.notes.xlsx)
-
-Link to Angela's lab presentation with results and discussing the results: 
-
-[Lab presentation 2.21 most updated version.pptx](https://github.com/AngelaZhou779/RISE/files/8174756/Lab.presentation.2.21.most.updated.version.pptx)
-
-Overall, we found 3 main trends in biological function: 
-1. Immunity
-2. Longevity/Fertility
-3. Energy utilization
-
-Two of our significant miRNAs did not have any annotation in Xu et. al so I will proceed to do seperate literature searches for them:
-miR-283 and miR-2592
-
-https://www.ncbi.nlm.nih.gov/gene/100314356
-https://pubmed.ncbi.nlm.nih.gov/20817720/
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2956262/
-https://www.ncbi.nlm.nih.gov/gene/100314356
-https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0006463
-https://www.mdpi.com/1999-4915/13/8/1464
-
-### Target Predicition 
-
-Both miRanda (v3.3a, Parameters: Gap Open Penalty: -9.000000, Gap Extend Penalty: -4.000000, Score Threshold: 140.000000, Energy Threshold: -20.000000 kcal/mol, Scaling Parameter: 4.000000: Enright et al., 2003) and RNAhybrid (v, Parameters: binding required in miRNA positions 2–7, p-value < 0.1, maximum target sequence length 100000, energy cutoff −20;  Krüger & Rehmsmeier, 2006) were used to predict traget genes for the DE miRNAs. A more detailed description of the workflow can be found [here](https://github.com/srmarzec/Culex_Biting_miRNA/blob/main/misc/TargetPrediction.md).
-
-No significant GO term enrichment or KEGG pathway enrichment based on the few consenesus genes that were found between both target prediction software. 
-
-### Obtaining CpipJ IDs from past assembly for gene IDs of the newest assembly
-Because we are working with the newest Culex quinquefasciatus assembly from NCBI (GCF_015732765.1), we ran into issues where downstream analysis for GO and KEGG pathway enrichment were hindered since those databases had annotations based on past Culex quinquefasciatus assemblies using locus tags (i.e. the CpipJ IDs as identifiers). Details on how we obtained locus tags is [here](https://github.com/srmarzec/Culex_Biting_RNAseq/blob/main/misc/GeneID_LocusTag_Conversion.md).
+As a result of performing differential expression analysis on our miRNAs, we obtained no differentially abundant miRNAs.
